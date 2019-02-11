@@ -8,11 +8,11 @@ namespace WebCustomerApp.Models.AccountViewModels
 {
     public class LoginViewModel
     {
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
+		[Required]
+		[Display(Name = "Login")]
+		public string Login { get; set; }
 
-        [Required]
+		[Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
