@@ -34,6 +34,8 @@ namespace WebCustomerApp
 			(opts =>
 			{
 				opts.Password.RequiredLength = 5;
+				opts.Password.RequireNonAlphanumeric = false;
+				opts.Password.RequireDigit = false;
 				opts.User.RequireUniqueEmail = true;
 			}
 			)

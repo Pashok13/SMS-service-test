@@ -221,7 +221,7 @@ namespace WebCustomerApp.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-				ApplicationUser user = new ApplicationUser { UserName = model.Login, Email = model.Email };
+				ApplicationUser user = new ApplicationUser { UserName = model.Login, Email = model.Email, PhoneNumber = model.PhoneNumber};
 				var result = await _userManager.CreateAsync(user, model.Password);
 
 				if (result.Succeeded)

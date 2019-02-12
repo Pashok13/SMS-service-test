@@ -11,7 +11,8 @@ namespace WebCustomerApp.Data
 		public DbSet<AdditInfo> AdditInfo	{ get; set; }
 		public DbSet<MessegeRecipient> MessegesRecipients { get; set; }
 
-		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) {
+		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) 
+		{
 			Database.EnsureCreated();
 		}
 

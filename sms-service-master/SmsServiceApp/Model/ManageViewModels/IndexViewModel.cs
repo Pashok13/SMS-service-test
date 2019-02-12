@@ -18,7 +18,8 @@ namespace WebCustomerApp.Models.ManageViewModels
 
         [Phone]
         [Display(Name = "Phone number")]
-        public string PhoneNumber { get; set; }
+		[RegularExpression(@"^\+[0-9]{12}$", ErrorMessage = "Not a valid phone number")]
+		public string PhoneNumber { get; set; }
 
         public string StatusMessage { get; set; }
     }
