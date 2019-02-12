@@ -46,6 +46,7 @@ namespace WebCustomerApp
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+			services.AddTransient<IUnitOfWork, UnitOfWork>();
 			services.AddTransient<IMessageRepository, MessageRepository>();
 			services.AddTransient<IPhoneRepository, PhoneRepository>();
 			services.AddTransient<IRepository<Phone>, GenericRepository<Phone>>();

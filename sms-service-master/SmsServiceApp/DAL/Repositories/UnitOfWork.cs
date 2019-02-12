@@ -9,57 +9,24 @@ namespace WebCustomerApp.Repositories
 {
 	public class UnitOfWork : IDisposable, IUnitOfWork
 	{
-		private readonly ApplicationDbContext context;
-		private UserManager<ApplicationUser> userRepository;
-		private PhoneRepository phoneRepository;
-		private MessageRepository messageRepository;
+		public ApplicationDbContext context;
+		public UserManager<ApplicationUser> UserRepository { get; }
+		public SignInManager<ApplicationUser> SignInRepository { get; }
+		public IPhoneRepository PhoneRepository { get; }
+		public IMessageRepository MessageRepository { get; }
 
-		public UnitOfWork(ApplicationDbContext context)
+		public UnitOfWork(ApplicationDbContext context,UserManager<ApplicationUser> userRepository, 
+				SignInManager<ApplicationUser> signInRepository,IPhoneRepository phoneRepository, IMessageRepository messageRepository)
 		{
+			UserRepository = userRepository;
+			SignInRepository = signInRepository;
+			PhoneRepository = phoneRepository;
+			MessageRepository = messageRepository;
 			this.context = context;
-		}
-
-		public UserManager<ApplicationUser> UserRepository
-		{
-			get
-			{
-				if (userRepository == null)
-				{
-					userRepository = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context), context);
-				}
-				return userRepository;
-			}
-		}
-
-		public PhoneRepository PhoneRepository
-		{
-			get
-			{
-				if (phoneRepository == null)
-				{
-					phoneRepository = new PhoneRepository(context);
-				}
-				return phoneRepository;
-			}
-		}
-
-		public MessageRepository MessageRepository
-		{
-			get
-			{
-				if (messageRepository == null)
-				{
-					messageRepository = new MessageRepository(context);
-				}
-				return messageRepository;
-			}
 		}
 
 		public void Save()
 		{
-			//UserRepository.SaveChanges();
-			//PhoneRepository.SaveChanges();
-			//MessageRepository.SaveChanges();
 			context.SaveChanges();
 		}
 
