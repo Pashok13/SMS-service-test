@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DAL.Interfaces
 {
-	interface IUnitOfWork
+	public interface IUnitOfWork
 	{
 		void Save();
 		void Dispose();

@@ -12,6 +12,8 @@ using WebCustomerApp.Data;
 using WebCustomerApp.Models;
 using WebCustomerApp.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using WebCustomerApp.Repositories;
+using DAL.Interfaces;
 
 namespace WebCustomerApp
 {
@@ -44,10 +46,14 @@ namespace WebCustomerApp
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+			services.AddTransient<IMessageRepository, MessageRepository>();
+			services.AddTransient<IPhoneRepository, PhoneRepository>();
+			services.AddTransient<IRepository<Phone>, GenericRepository<Phone>>();
+			services.AddTransient<IRepository<Message>, GenericRepository<Message>>();
 
-            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => {options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");});
+			//services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => {options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");});
 
-            services.AddMvc();
+			services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -5,7 +5,7 @@ using WebCustomerApp.Models;
 
 namespace DAL.Interfaces
 {
-	interface IPhoneRepository : IRepository<Phone>
+	public interface IPhoneRepository : IRepository<Phone>
 	{
 		void CreateByPhone(string number);
 		Phone FindByPhone(string number);
