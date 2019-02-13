@@ -6,10 +6,10 @@ namespace WebCustomerApp.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-		public DbSet<Message> Messages		{ get; set; }
-		public DbSet<Phone> Phones			{ get; set; }
+		public DbSet<Message> Message		{ get; set; }
+		public DbSet<Phone> Phone			{ get; set; }
 		public DbSet<AdditInfo> AdditInfo	{ get; set; }
-		public DbSet<MessegeRecipient> MessegesRecipients { get; set; }
+		public DbSet<MessegeRecipient> MessegesRecipient { get; set; }
 
 		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) 
 		{

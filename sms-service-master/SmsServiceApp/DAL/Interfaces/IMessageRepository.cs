@@ -7,5 +7,6 @@ namespace DAL.Interfaces
 {
 	public interface IMessageRepository : IRepository<Message>
 	{
+		void CreateMessage(Message message);
 	}
 }
