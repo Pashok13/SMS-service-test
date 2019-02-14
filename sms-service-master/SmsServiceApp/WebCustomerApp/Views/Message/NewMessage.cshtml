@@ -17,29 +17,63 @@
 <h2>@ViewData["Title"]</h2>
 <div class="row">
 	<div class="col-md-4">
-		<form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
 			<section>
 
 				<div class="form-group">
-					<label asp-for="RecepientPhone"></label>
-					<input asp-for="RecepientPhone" class="form-control" />
-					<span asp-validation-for="RecepientPhone" class="text-danger"></span>
+					<label>Recepient phone</label>
+					<input  id="recepientEditor" class="form-control" />
+				</div>
+
+				<div>
+					<input type="button" id="addRecepient" value="Add Recepient" />
+					<input type="button" id="removeRecepient" value="Remove recepient" />
 				</div>
 
 				<div class="form-group">
-					<label asp-for="RecepientName"></label>
-					<input asp-for="RecepientName" class="form-control" />
-					<span asp-validation-for="RecepientName" class="text-danger"></span>
+					<label>Message text</label>
+					<input id="messageEditor" class="form-control" />
 				</div>
 
-				<div class="form-group">
-					<label asp-for="MessageText"></label>
-					<input asp-for="MessageText" class="form-control" />
-					<span asp-validation-for="MessageText" class="text-danger"></span>
+				<div>
+					<div>
+						<textarea id="phones" value="Add Message" rows="15"></textarea>
+					</div>
 				</div>
 
-				<button type="submit" class="btn btn-default">Send</button>
+				<button type="submit" id="sendMessage" class="btn btn-default">Send</button>
 			</section>
-		</form>
+
+			<script type="text/javascript">
+				{
+					var phones = [];
+				}
+			</script>
+
+			<script type="text/javascript">
+				document.getElementById("addRecepient").onclick = function () {
+					var input = document.getElementById("recepientEditor")
+					phones.push(input.value);
+					var textarea = document.getElementById("phones");
+					textarea.textContent += input.value + "\n";
+					input.value = "";
+				}
+			</script>
+
+			<script type="text/javascript">
+				document.getElementById("sendMessage").onclick = function () {
+					var input = document.getElementById("messageEditor")
+					var Message = {};
+					Message.MessageText = input.value;
+					Message.RecepientPhones = phones;
+					$.ajax(
+						{
+							url: '/Message/NewMessage',
+							//contentType: 'application/json; charset=utf-8',
+							//dataType: 'json',
+							type: 'POST',
+							data: Message
+						});
+				}
+			</script>
 	</div>
 </div>

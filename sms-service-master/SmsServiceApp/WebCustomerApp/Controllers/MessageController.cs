@@ -20,21 +20,25 @@ namespace WebApp.Controllers
 			_unitOfWork = unitOfWork;
 		}
 
-		public IActionResult NewMessage(string returnUrl = null)
+		public IActionResult NewMessage()
 		{
-			ViewData["ReturnUrl"] = returnUrl;
 			return View();
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> NewMessage(CreateViewModel model, string returnUrl = null)
+		public IActionResult NewMessage(CreateViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
 				Message message = new Message() { TextMessage = model.MessageText, UserId = _unitOfWork.UserRepository.GetUserId(User) };
-				Phone phone = new Phone() { Number = model.RecepientPhone };
+				
+				foreach (var phone in model.RecepientPhones)
+				{
+					if (_unitOfWork.PhoneRepository.FindByPhone(phone) == null)
+						_unitOfWork.PhoneRepository.CreateByPhone(phone);
+				}
+
 				_unitOfWork.MessageRepository.Add(message);
-				_unitOfWork.PhoneRepository.Add(phone);
 				_unitOfWork.Save();
 				return RedirectToAction("Index", "Home");
 			}
