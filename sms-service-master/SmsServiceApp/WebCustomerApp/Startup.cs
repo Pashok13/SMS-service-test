@@ -14,6 +14,7 @@ using WebCustomerApp.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using WebCustomerApp.Repositories;
 using DAL.Interfaces;
+using DAL.Repositories;
 
 namespace WebCustomerApp
 {
@@ -49,8 +50,10 @@ namespace WebCustomerApp
 			services.AddTransient<IUnitOfWork, UnitOfWork>();
 			services.AddTransient<IMessageRepository, MessageRepository>();
 			services.AddTransient<IPhoneRepository, PhoneRepository>();
+			services.AddTransient<IMessageRecipientRepository, MessageRecipientRepository>();
 			services.AddTransient<IRepository<Phone>, GenericRepository<Phone>>();
 			services.AddTransient<IRepository<Message>, GenericRepository<Message>>();
+			services.AddTransient<IRepository<MessageRecipient>, GenericRepository<MessageRecipient>>();
 
 			//services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => {options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");});
 

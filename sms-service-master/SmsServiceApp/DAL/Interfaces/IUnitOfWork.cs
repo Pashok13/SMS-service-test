@@ -11,9 +11,10 @@ namespace DAL.Interfaces
 	{
 		void Save();
 		void Dispose();
-		IPhoneRepository PhoneRepository				{ get; }
-		IMessageRepository MessageRepository			{ get; }
-		UserManager<ApplicationUser> UserRepository		{ get; }
+		IPhoneRepository PhoneRepository { get; }
+		IMessageRepository MessageRepository { get; }
+		IMessageRecipientRepository MessageRecipientRepository { get; }
+		UserManager<ApplicationUser> UserRepository	{ get; }
 		SignInManager<ApplicationUser> SignInRepository { get; }
 	}
 }

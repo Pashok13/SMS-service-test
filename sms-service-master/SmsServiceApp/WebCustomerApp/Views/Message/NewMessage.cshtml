@@ -17,63 +17,86 @@
 <h2>@ViewData["Title"]</h2>
 <div class="row">
 	<div class="col-md-4">
-			<section>
-			<form onsubmit="Submit()" asp-route-returnUrl="@ViewData["ReturnUrl"]">
-				<div class="form-group">
-					<label>Recepient phone</label>
-					<input id="recepientEditor" class="form-control" />
-				</div>
+		<section>
+			<div class="form-group">
+				<label>Recepient phone</label>
+				<input id="recepientEditor" class="form-control" />
+				<span asp-validation-for="RecepientPhones" id="errors" class="text-danger"></span>
+			</div>
 
-				<div>
-					<input type="button" id="addRecepient" value="Add Recepient" />
-					<input type="button" id="removeRecepient" value="Remove recepient" />
-				</div>
+			<div>
+				<button onclick="AddRecepient()">Add recepient</button>
+				<button onclick="RemoveRecepient()">Remove recepient</button>
+			</div>
 
-				<br>
+			<br>
 
-				<div class="form-group">
-					<label>Message text</label>
-					<input id="messageEditor" class="form-control" />
-				</div>
+			<div class="form-group">
+				<label>Message text</label>
+				<input id="messageEditor" class="form-control" />
+			</div>
 
-				<div>
-					<div>
-						<textarea id="phones" value="Add Message" rows="15"></textarea>
-					</div>
-				</div>
+			<div class="form-group">
+				<textarea id="phones" value="Add Message" rows="15"></textarea>
+			</div>
 
-				<button type="submit" id="sendMessage" class="btn btn-default">Send</button>
-			</form>
-			</section>
+			<button type="submit" onclick="MakeModel()" id="sendMessage" class="btn btn-default">Send</button>
 
-			<script type="text/javascript">
-				{
-					var phones = [];
-				}
-	
-				document.getElementById("addRecepient").onclick = function () {
-					var input = document.getElementById("recepientEditor")
+		</section>
+
+		<script type="text/javascript">
+
+			var phones = [];
+
+			function AddRecepient() {
+				var input = document.getElementById("recepientEditor");
+				var errorMessage = document.getElementById("errors");
+				errorMessage.textContent = "";
+				var reg = new RegExp("^[+][0-9]{12}$");
+
+				if (reg.test(input.value)) {
 					phones.push(input.value);
 					var textarea = document.getElementById("phones");
 					textarea.textContent += input.value + "\n";
 					input.value = "";
 				}
-
-
-				function Submit() {
-					var input = document.getElementById("messageEditor")
-					var Message = {};
-					Message.MessageText = input.value;
-					Message.RecepientPhones = phones;
-					$.ajax(
-						{
-							url: '/Message/NewMessage',
-							//contentType: 'application/json; charset=utf-8',
-							//dataType: 'json',
-							type: 'POST',
-							data: Message
-						});
+				else {
+					errorMessage.textContent = "Incorrect phone number";
 				}
-			</script>
+			}
+
+			function RemoveRecepient() {
+				var input = document.getElementById("recepientEditor")
+				var errorMessage = document.getElementById("errors");
+				errorMessage.textContent = "";
+
+				if (phones.find(input.value)) {
+					phones.remove(input.value)
+					var textarea = document.getElementById("phones");
+					textarea.textContent.replace(input.value, '');
+					input.value = "";
+				}
+				else {
+					errorMessage.textContent = "This phone not find in recepients list";
+				}
+			}
+
+			function MakeModel() {
+				var message = document.getElementById("messageEditor")
+
+				var Message = {};
+				Message.MessageText = message.value;
+				Message.RecepientPhones = phones;
+
+				$.ajax(
+				{
+					url: '/Message/NewMessage',
+					//contentType: 'application/json; charset=utf-8',
+					//dataType: 'json',
+					type: 'POST',
+					data: Message
+				});
+			}
+		</script>
 	</div>
 </div>

@@ -15,48 +15,51 @@ namespace WebApp.Controllers
 	public class MessageController : Controller
 	{
 		private readonly IUnitOfWork _unitOfWork;
-		private readonly ILogger _logger;
 
-		public MessageController(IUnitOfWork unitOfWork, ILogger<MessageController> logger)
+		public MessageController(IUnitOfWork unitOfWork)
 		{
 			_unitOfWork = unitOfWork;
-			_logger = logger;
 		}
 
-		public IActionResult NewMessage(string returnUrl = null)
+		public IActionResult NewMessage()
 		{
-			ViewData["ReturnUrl"] = returnUrl;
 			return View();
 		}
 
 		[HttpPost]
-		public IActionResult NewMessage(CreateViewModel model, string returnUrl = null)
+		public IActionResult NewMessage(CreateViewModel model)
 		{
-			ViewData["ReturnUrl"] = returnUrl;
 			if (ModelState.IsValid)
 			{
 				Message message = new Message() { TextMessage = model.MessageText, UserId = _unitOfWork.UserRepository.GetUserId(User) };
-				
+				_unitOfWork.MessageRepository.Add(message);
+
 				foreach (var phone in model.RecepientPhones)
 				{
-					if (_unitOfWork.PhoneRepository.FindByPhone(phone) == null)
-						_unitOfWork.PhoneRepository.CreateByPhone(phone);
-				}
+					Phone currentPhone;
+					currentPhone = _unitOfWork.PhoneRepository.FindByPhone(phone);
 
-				_unitOfWork.MessageRepository.Add(message);
+					if (currentPhone == null)
+					{
+						currentPhone = new Phone() { Number = phone };
+						_unitOfWork.PhoneRepository.Add(currentPhone);
+					}
+
+					_unitOfWork.MessageRecipientRepository.CreateСontactRecord(message.MessageId, currentPhone.Id);		
+				}
+			
 				_unitOfWork.Save();
-				return RedirectToAction(nameof(SuccessSend));
+				return View("SuccessSend");
 			}
 			else
 			{
-				_logger.LogWarning("Invalid phone(s) number");
 				return View(model);
 			}
 		}
 
 		public IActionResult SuccessSend()
 		{
-			return View("~/Views/Message/SuccessSend.cshtml");
+			return View();
 		}
 	}
 }

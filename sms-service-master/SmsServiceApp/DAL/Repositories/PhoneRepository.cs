@@ -14,13 +14,13 @@ namespace WebCustomerApp.Repositories
 		public void CreateByPhone(string number)
 		{
 			Phone record = new Phone() { Number = number };
-			context.Phone.Add(record);
+			context.Phones.Add(record);
 			context.SaveChanges();
 		}
 
 		public Phone FindByPhone(string number)
 		{
-			Phone record = context.Phone.FirstOrDefault(p => p.Number == number);
+			Phone record = context.Phones.FirstOrDefault(p => p.Number == number);
 			return record;
 		}
 	}

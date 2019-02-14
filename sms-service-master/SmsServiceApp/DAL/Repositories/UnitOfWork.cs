@@ -14,14 +14,20 @@ namespace WebCustomerApp.Repositories
 		public SignInManager<ApplicationUser> SignInRepository { get; }
 		public IPhoneRepository PhoneRepository { get; }
 		public IMessageRepository MessageRepository { get; }
+		public IMessageRecipientRepository MessageRecipientRepository { get; }
 
-		public UnitOfWork(ApplicationDbContext context,UserManager<ApplicationUser> userRepository, 
-				SignInManager<ApplicationUser> signInRepository,IPhoneRepository phoneRepository, IMessageRepository messageRepository)
+		public UnitOfWork(ApplicationDbContext context,
+				UserManager<ApplicationUser> userRepository, 
+				SignInManager<ApplicationUser> signInRepository,
+				IPhoneRepository phoneRepository, 
+				IMessageRepository messageRepository,
+				IMessageRecipientRepository messageRecipientRepository)
 		{
 			UserRepository = userRepository;
 			SignInRepository = signInRepository;
 			PhoneRepository = phoneRepository;
 			MessageRepository = messageRepository;
+			MessageRecipientRepository = messageRecipientRepository;
 			this.context = context;
 		}
 

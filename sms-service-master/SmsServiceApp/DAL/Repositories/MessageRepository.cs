@@ -13,13 +13,9 @@ namespace WebCustomerApp.Repositories
 
 		public void CreateMessage(Message message)
 		{
-			context.Message.Add(message);
+			context.Messages.Add(message);
 			context.SaveChanges();
 		}
 
-		public void AddRecepients(List<Phone> phones)
-		{
-			
-		}
 	}
 }
