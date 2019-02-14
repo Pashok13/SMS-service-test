@@ -7,13 +7,10 @@ namespace WebCustomerApp.Models.MessageViewModels
 {
 	public class CreateViewModel
 	{
-		//[Required]
-		//[Display(Name = "Recepient phone")]
-		//[RegularExpression(@"^\+[0-9]{12}$", ErrorMessage = "Invalid phone(s) number")]
+		[Required]
 		public List<string> RecepientPhones { get; set; }
 
-		//[Required]
-		//[Display(Name = "Text")]
+		[Required]
 		public string MessageText { get; set; }
 
 	}

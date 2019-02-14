@@ -21,7 +21,7 @@
 			<div class="form-group">
 				<label>Recepient phone</label>
 				<input id="recepientEditor" class="form-control" />
-				<span asp-validation-for="RecepientPhones" id="errors" class="text-danger"></span>
+				<span asp-validation-for="RecepientPhones" id="phoneError" class="text-danger"></span>
 			</div>
 
 			<div>
@@ -41,6 +41,11 @@
 			</div>
 
 			<button type="submit" onclick="MakeModel()" id="sendMessage" class="btn btn-default">Send</button>
+			
+			<div>
+				<br />
+				<label id="info"></label>
+			</div>
 
 		</section>
 
@@ -50,7 +55,9 @@
 
 			function AddRecepient() {
 				var input = document.getElementById("recepientEditor");
-				var errorMessage = document.getElementById("errors");
+				var errorMessage = document.getElementById("phoneError");
+				var info = document.getElementById("info");
+				info.textContent = "";
 				errorMessage.textContent = "";
 				var reg = new RegExp("^[+][0-9]{12}$");
 
@@ -66,36 +73,54 @@
 			}
 
 			function RemoveRecepient() {
-				var input = document.getElementById("recepientEditor")
-				var errorMessage = document.getElementById("errors");
+				var input = document.getElementById("recepientEditor");
+				var errorMessage = document.getElementById("phoneError");
+				var info = document.getElementById("info");
+				info.textContent = "";
 				errorMessage.textContent = "";
 
-				if (phones.find(input.value)) {
-					phones.remove(input.value)
-					var textarea = document.getElementById("phones");
-					textarea.textContent.replace(input.value, '');
-					input.value = "";
+				if (phones.indexOf(input.value) == -1) {
+					errorMessage.textContent = "This phone not find in recepients list";
 				}
 				else {
-					errorMessage.textContent = "This phone not find in recepients list";
+					var index = phones.indexOf(input.value);
+					phones.splice(index, 1)
+					textarea = document.getElementById("phones");
+					textarea.textContent = textarea.textContent.replace(input.value + "\n", "");
+					input.value = "";
 				}
 			}
 
 			function MakeModel() {
 				var message = document.getElementById("messageEditor")
+				var info = document.getElementById("info");
+				info.textContent = "";
 
-				var Message = {};
-				Message.MessageText = message.value;
-				Message.RecepientPhones = phones;
+				if (phones.length == 0) {
+					info.style.color = "red"
+					info.textContent = "Recepiens list are empty";	
+				}
+				else if (message.value == '') {
+					info.style.color = "red"
+					info.textContent = "Please, add text of message";
+				}
+				else {
+					var Message = {};
+					Message.MessageText = message.value;
+					Message.RecepientPhones = phones;
 
-				$.ajax(
-				{
-					url: '/Message/NewMessage',
-					//contentType: 'application/json; charset=utf-8',
-					//dataType: 'json',
-					type: 'POST',
-					data: Message
-				});
+					$.ajax(
+						{
+							url: '/Message/NewMessage',
+							//contentType: 'application/json; charset=utf-8',
+							//dataType: 'json',
+							type: 'POST',
+							data: Message
+						});
+
+					info.style.color = "green"
+					info.textContent = "Messages are sended";
+				}
 			}
 		</script>
 	</div>
