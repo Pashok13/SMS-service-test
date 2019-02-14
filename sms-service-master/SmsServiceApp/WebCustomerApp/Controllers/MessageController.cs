@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DAL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using WebCustomerApp.Models;
 using WebCustomerApp.Models.MessageViewModels;
 
@@ -14,20 +15,24 @@ namespace WebApp.Controllers
 	public class MessageController : Controller
 	{
 		private readonly IUnitOfWork _unitOfWork;
+		private readonly ILogger _logger;
 
-		public MessageController(IUnitOfWork unitOfWork)
+		public MessageController(IUnitOfWork unitOfWork, ILogger<MessageController> logger)
 		{
 			_unitOfWork = unitOfWork;
+			_logger = logger;
 		}
 
-		public IActionResult NewMessage()
+		public IActionResult NewMessage(string returnUrl = null)
 		{
+			ViewData["ReturnUrl"] = returnUrl;
 			return View();
 		}
 
 		[HttpPost]
-		public IActionResult NewMessage(CreateViewModel model)
+		public IActionResult NewMessage(CreateViewModel model, string returnUrl = null)
 		{
+			ViewData["ReturnUrl"] = returnUrl;
 			if (ModelState.IsValid)
 			{
 				Message message = new Message() { TextMessage = model.MessageText, UserId = _unitOfWork.UserRepository.GetUserId(User) };
@@ -40,13 +45,18 @@ namespace WebApp.Controllers
 
 				_unitOfWork.MessageRepository.Add(message);
 				_unitOfWork.Save();
-				return RedirectToAction("Index", "Home");
+				return RedirectToAction(nameof(SuccessSend));
 			}
-
-			return View(model);
-
+			else
+			{
+				_logger.LogWarning("Invalid phone(s) number");
+				return View(model);
+			}
 		}
 
-
+		public IActionResult SuccessSend()
+		{
+			return View("~/Views/Message/SuccessSend.cshtml");
+		}
 	}
 }

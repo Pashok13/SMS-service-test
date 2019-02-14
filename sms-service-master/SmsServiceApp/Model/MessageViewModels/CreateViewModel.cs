@@ -9,7 +9,7 @@ namespace WebCustomerApp.Models.MessageViewModels
 	{
 		//[Required]
 		//[Display(Name = "Recepient phone")]
-		//[RegularExpression(@"^\+[0-9]{12}$", ErrorMessage = "Invalid phone number")]
+		//[RegularExpression(@"^\+[0-9]{12}$", ErrorMessage = "Invalid phone(s) number")]
 		public List<string> RecepientPhones { get; set; }
 
 		//[Required]

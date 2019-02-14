@@ -18,16 +18,18 @@
 <div class="row">
 	<div class="col-md-4">
 			<section>
-
+			<form onsubmit="Submit()" asp-route-returnUrl="@ViewData["ReturnUrl"]">
 				<div class="form-group">
 					<label>Recepient phone</label>
-					<input  id="recepientEditor" class="form-control" />
+					<input id="recepientEditor" class="form-control" />
 				</div>
 
 				<div>
 					<input type="button" id="addRecepient" value="Add Recepient" />
 					<input type="button" id="removeRecepient" value="Remove recepient" />
 				</div>
+
+				<br>
 
 				<div class="form-group">
 					<label>Message text</label>
@@ -41,15 +43,14 @@
 				</div>
 
 				<button type="submit" id="sendMessage" class="btn btn-default">Send</button>
+			</form>
 			</section>
 
 			<script type="text/javascript">
 				{
 					var phones = [];
 				}
-			</script>
-
-			<script type="text/javascript">
+	
 				document.getElementById("addRecepient").onclick = function () {
 					var input = document.getElementById("recepientEditor")
 					phones.push(input.value);
@@ -57,10 +58,9 @@
 					textarea.textContent += input.value + "\n";
 					input.value = "";
 				}
-			</script>
 
-			<script type="text/javascript">
-				document.getElementById("sendMessage").onclick = function () {
+
+				function Submit() {
 					var input = document.getElementById("messageEditor")
 					var Message = {};
 					Message.MessageText = input.value;
