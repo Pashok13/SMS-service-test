@@ -1,17 +1,18 @@
 ﻿using DAL.Interfaces;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
 using WebCustomerApp.Data;
 using WebCustomerApp.Models;
+using WebCustomerApp.Services;
 
 namespace WebCustomerApp.Repositories
 {
 	public class UnitOfWork : IDisposable, IUnitOfWork
 	{
 		public ApplicationDbContext context;
-		public UserManager<ApplicationUser> UserRepository { get; }
+		public UserManager<ApplicationUser> UserRepository { get; }	
 		public SignInManager<ApplicationUser> SignInRepository { get; }
+		public IEmailSender EmailSender { get; }
 		public IPhoneRepository PhoneRepository { get; }
 		public IMessageRepository MessageRepository { get; }
 		public IMessageRecipientRepository MessageRecipientRepository { get; }
@@ -19,10 +20,12 @@ namespace WebCustomerApp.Repositories
 		public UnitOfWork(ApplicationDbContext context,
 				UserManager<ApplicationUser> userRepository, 
 				SignInManager<ApplicationUser> signInRepository,
+				IEmailSender emailSender,
 				IPhoneRepository phoneRepository, 
 				IMessageRepository messageRepository,
 				IMessageRecipientRepository messageRecipientRepository)
 		{
+			EmailSender = emailSender;
 			UserRepository = userRepository;
 			SignInRepository = signInRepository;
 			PhoneRepository = phoneRepository;

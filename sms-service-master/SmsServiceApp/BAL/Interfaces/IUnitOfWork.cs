@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using WebCustomerApp.Models;
 using WebCustomerApp.Repositories;
+using WebCustomerApp.Services;
 
 namespace DAL.Interfaces
 {
@@ -11,6 +13,7 @@ namespace DAL.Interfaces
 	{
 		void Save();
 		void Dispose();
+		IEmailSender EmailSender { get; }
 		IPhoneRepository PhoneRepository { get; }
 		IMessageRepository MessageRepository { get; }
 		IMessageRecipientRepository MessageRecipientRepository { get; }

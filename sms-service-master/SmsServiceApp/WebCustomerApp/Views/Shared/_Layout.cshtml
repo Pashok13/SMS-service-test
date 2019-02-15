@@ -26,16 +26,11 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">WebCustomerApp</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">SMS-service</a>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Message" asp-action="NewMessage">New message</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                </ul>
-                @await Html.PartialAsync("_LoginPartial")
-            </div>
+			<div class="navbar-collapse collapse">
+				@await Html.PartialAsync("_LoginPartial")
+			</div>
         </div>
     </nav>
     <div class="container body-content">

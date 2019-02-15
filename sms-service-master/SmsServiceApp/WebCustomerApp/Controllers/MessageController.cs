@@ -57,6 +57,41 @@ namespace WebApp.Controllers
 			}
 		}
 
+		public IActionResult MessageList()
+		{
+			string userID = _unitOfWork.UserRepository.GetUserId(User);
+			var messages = _unitOfWork.MessageRepository.GetAll(f => f.UserId == userID);
+
+			List<MessageListModel> messageList = new List<MessageListModel>();
+
+			foreach (var mes in messages)
+			{
+				List<string> phones = new List<string>();
+				var recepientMessages = _unitOfWork.MessageRecipientRepository.GetAll(m => m.MessageId == mes.MessageId);
+				foreach (var recepientMes in recepientMessages)
+				{
+					phones.Add(_unitOfWork.PhoneRepository.GetByID(recepientMes.RecepientId).Number);
+				}
+				messageList.Add(new MessageListModel(mes.TextMessage, phones));
+			}
+			ViewBag.MessagesList = messageList;
+
+			//foreach (var mes in ViewBag.MessagesList)
+			//{
+			//	foreach (var phone in mes.RecepientPhones)
+			//	{
+			//		continue;
+			//	}
+			//}
+
+			return View();
+		}
+
+		public IActionResult ContactList()
+		{
+			return View();
+		}
+
 		public IActionResult SuccessSend()
 		{
 			return View();
