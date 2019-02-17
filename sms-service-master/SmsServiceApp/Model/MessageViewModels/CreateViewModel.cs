@@ -9,9 +9,10 @@ namespace WebCustomerApp.Models.MessageViewModels
 	{
 		[Required]
 		public List<string> RecepientPhones { get; set; }
-
 		[Required]
 		public string MessageText { get; set; }
+		[Required]
+		public DateTime DateOfSend { get; set; }
 
 	}
 }

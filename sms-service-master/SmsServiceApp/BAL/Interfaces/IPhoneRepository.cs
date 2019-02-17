@@ -9,5 +9,6 @@ namespace DAL.Interfaces
 	{
 		void CreateByPhone(string number);
 		Phone FindByPhone(string number);
+		List<Phone> GetPhonesByUserId(string userId);
 	}
 }

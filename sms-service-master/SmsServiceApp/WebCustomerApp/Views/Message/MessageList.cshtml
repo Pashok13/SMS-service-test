@@ -7,27 +7,44 @@
 @{
 	Layout = "/Views/Shared/_Layout.cshtml";
 }
+<style>
+	.tab {
+		border-collapse: collapse;
+		border-style: hidden;
+		
+	}
+
+	.tab td {
+		border: 1px solid black;
+		padding: 8px 20px;
+	}
+</style>
 
 <section>
-	<h4>Messages</h4>
-	<table border="1"  cellpadding="2" cellspacing="2">
+	<h2 style="margin-left : 30px">Messages</h2>
+	<table  class="tab">
 		<tr>
-			<td align="center"><p>Text</p></td>
-			<td align="center"><p>Recepients</p></td>
+			<td align="center"><b style="font-size : 18px">Date of send</b></td>
+			<td align="center"><b style="font-size : 18px">Create date</b></td>
+			<td align="center"><b style="font-size : 18px">Text</b></td>
+			<td align="center"><b style="font-size : 18px">Recepients</b></td>
 		</tr>
 		@foreach (var mes in ViewBag.MessagesList)
 		{
-			<tr>
-				<td><p>@mes.MessageText</p></td>
-				<td>
-					<ul>
-						@foreach (var phone in mes.RecepientPhones)
-						{
-							<li>@phone</li>
-						}
-					</ul>
-				</td>
-			</tr>
+		<tr>
+			<td><p>@mes.SendDate</p></td>
+			<td><p>@mes.CreateDate</p></td>
+			<td><p>@mes.TextMessage</p></td>
+			<td>
+				<ul>
+					@foreach (var rec in mes.MessageRecipient)
+					{
+						<li title="info">@rec.Phone.Number</li>
+					}
+				</ul>
+			</td>
+		</tr>
 		}
 	</table>
 </section>
+

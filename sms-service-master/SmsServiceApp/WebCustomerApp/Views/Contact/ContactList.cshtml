@@ -1,0 +1,45 @@
+﻿@*
+	For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+	ViewData["Title"] = "My contacts";
+}
+@{
+	Layout = "/Views/Shared/_Layout.cshtml";
+}
+<style>
+	.tab {
+		border-collapse: collapse;
+		border-style: hidden;
+	}
+
+		.tab td {
+			border: 1px solid black;
+			padding: 8px 20px;
+		}
+</style>
+
+<section>
+	<h2 style="margin-left : 30px">Contacts</h2>
+	<table class="tab">
+		<tr>
+			<td align="center"><b style="font-size : 18px">Phone</b></td>
+			<td align="center"><b style="font-size : 18px">Additional information</b></td>
+		</tr>
+		@foreach (var rec in ViewBag.ContactList)
+		{
+			<tr>
+				<td><p>@rec.Number</p></td>
+				<td>
+					<ul>
+						@foreach (var inf in rec.AdditInfo)
+						{
+							<li title="info">@inf.Key : @inf.Value</li>
+						}
+						<li><button>Add info</button></li>
+					</ul>
+				</td>
+			</tr>
+		}
+	</table>
+</section>

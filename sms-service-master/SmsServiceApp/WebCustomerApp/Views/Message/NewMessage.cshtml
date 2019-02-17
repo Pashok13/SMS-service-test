@@ -4,7 +4,6 @@
 @using Microsoft.AspNetCore.Http.Authentication
 @using WebCustomerApp.Models.MessageViewModels
 @model CreateViewModel
-@*@inject SignInManager<ApplicationUser> SignInManager*@
 
 @{
 	ViewData["Title"] = "New message";
@@ -14,15 +13,15 @@
 	Layout = "/Views/Shared/_Layout.cshtml";
 }
 
-<h2>@ViewData["Title"]</h2>
+<h2 style="margin-left : 30px">@ViewData["Title"]</h2>
 
-<table>
-<tr class="row">
-	<td class="col-md-6">
+<table style="border-collapse:separate; border-spacing : 20px 10px">
+<tr>
+	<td style="width : 250px">
 		<section>
 			<div class="form-group">
 				<label>Recepient phone</label>
-				<input id="recepientEditor" class="form-control" />
+				<input id="phoneEditor" class="form-control" />
 				<span asp-validation-for="RecepientPhones" id="phoneError" class="text-danger"></span>
 			</div>
 
@@ -35,22 +34,35 @@
 
 			<div class="form-group">
 				<label>Message text</label>
-				<input id="messageEditor" class="form-control" />
+				<textarea id="textEditor" class="form-control" style="height : 135px; resize : none"></textarea>
+				<span asp-validation-for="MessageText" id="textError" class="text-danger"></span>
 			</div>
 
+			<div>
+				<input class="form-control" style="width : 250px" type="datetime-local" id="dateOfSend" lang="uk">
+				<span asp-validation-for="DateOfSend" id="dateError" class="text-danger"></span>
+			</div>
+
+			<br />
 			<button type="submit" onclick="MakeModel()" id="sendMessage" class="btn btn-default">Send</button>
 
 			<div>
 				<br />
-				<label id="info"></label>
+				<label id="generalInfo" style="color : red; width : 250px"></label>
 			</div>
 
 		</section>
 	</td>
-	<td class="col-md-7">
+	<td style="width : 200px">
 		<section aria-readonly="true">
 			<div class="form-group">
-				<textarea id="phones" value="Add Message" rows="10" readonly="readonly"></textarea>
+				<textarea class="form-control" style="width : 200px; resize : none" id="phones" rows="16" readonly="readonly"></textarea>
+			</div>
+			<div>
+				<button onclick="SaveRecepientsInFile()" style="width : 200px">Save list in a file</button>
+			</div>
+			<div>
+				<button onclick="GetRecepientsFromFile()" style="width : 200px">Brovse list from file</button>
 			</div>
 		</section>
 	</td>
@@ -59,75 +71,104 @@
 
 <script type="text/javascript">
 
+	var currentTime = new Date().toJSON().slice(0, 19);
+	var phone = document.getElementById("phoneEditor");
+	var text = document.getElementById("textEditor");
+	var dateOfSend = document.getElementById("dateOfSend");
+	var phoneError = document.getElementById("phoneError");
+	var textError = document.getElementById("textError");
+	var dateError = document.getElementById("dateError");
+	var generalInfo = document.getElementById("generalInfo");
 	var phones = [];
 
 	function AddRecepient() {
-		var input = document.getElementById("recepientEditor");
-		var errorMessage = document.getElementById("phoneError");
-		var info = document.getElementById("info");
-		info.textContent = "";
-		errorMessage.textContent = "";
+		generalInfo.textContent = "";
+
 		var reg = new RegExp("^[+][0-9]{12}$");
 
-		if (reg.test(input.value)) {
-			phones.push(input.value);
-			var textarea = document.getElementById("phones");
-			textarea.textContent += input.value + "\n";
-			input.value = "";
-		}
+		if (!reg.test(phone.value)) 
+			phoneError.textContent = "Incorrect phone number";
+		else if (phones.indexOf(phone.value) != -1)  		
+			phoneError.textContent = "This number are already added";
 		else {
-			errorMessage.textContent = "Incorrect phone number";
+			phones.push(phone.value);
+			var textarea = document.getElementById("phones");
+			textarea.textContent += phone.value + "\n";
+			phone.value = "";
+			phoneError.textContent = "";
 		}
 	}
 
 	function RemoveRecepient() {
-		var input = document.getElementById("recepientEditor");
-		var errorMessage = document.getElementById("phoneError");
-		var info = document.getElementById("info");
-		info.textContent = "";
-		errorMessage.textContent = "";
 
-		if (phones.indexOf(input.value) == -1) {
-			errorMessage.textContent = "This phone not find in recepients list";
-		}
+		generalInfo.textContent = "";
+
+		if (phones.indexOf(phone.value) == -1) 
+			phoneError.textContent = "This phone not find in recepients list";
 		else {
-			var index = phones.indexOf(input.value);
-			phones.splice(index, 1)
+			var phoneIndex = phones.indexOf(phone.value);
+			phones.splice(phoneIndex, 1)
 			textarea = document.getElementById("phones");
-			textarea.textContent = textarea.textContent.replace(input.value + "\n", "");
-			input.value = "";
+			textarea.textContent = textarea.textContent.replace(phone.value + "\n", "");
+			phone.value = "";
+			phoneError.textContent = "";
 		}
 	}
 
 	function MakeModel() {
-		var message = document.getElementById("messageEditor")
-		var info = document.getElementById("info");
-		info.textContent = "";
+		
 
-		if (phones.length == 0) {
-			info.style.color = "red"
-			info.textContent = "Recepiens list are empty";
-		}
-		else if (message.value == '') {
-			info.style.color = "red"
-			info.textContent = "Please, add text of message";
-		}
-		else {
+		if (CheckModel())
+		{
 			var Message = {};
-			Message.MessageText = message.value;
+			Message.MessageText = text.value;
 			Message.RecepientPhones = phones;
+			Message.DateOfSend = dateOfSend.value;
 
 			$.ajax(
 				{
 					url: '/Message/NewMessage',
-					//contentType: 'application/json; charset=utf-8',
-					//dataType: 'json',
 					type: 'POST',
 					data: Message
 				});
 
-			info.style.color = "green"
-			info.textContent = "Messages are sended";
+			generalInfo.style.color = "green"
+			generalInfo.textContent = "Messages are sended";
+			var submitBtn = document.getElementById("sendMessage");
+			submitBtn.setAttribute("disabled", "");
+			submitBtn.disabled = true;
 		}
+	}
+
+	function CheckModel() {
+
+		if (phones.length == 0) {
+			generalInfo.textContent = "Recepiens list are empty";
+			return false;
+		}
+		else if (textEditor.value == '') {
+			textError.textContent = "Please, add text of message";
+			return false;
+		}
+		else if (dateOfSend.value == "") {
+			dateError.textContent = "Please, check the time";
+			return false;
+		}
+		else if (dateOfSend.value < currentTime) {
+			dateError.textContent = "You can`t send messages in the past";
+			return false;
+		}
+		textError.textContent = "";
+		dateError.textContent = "";
+		generalInfo.textContent = "";
+		return true;
+	}
+
+	function SaveRecepientsInFile() {
+
+	}
+
+	function GetRecepientsFromFile() {
+
 	}
 </script>
