@@ -9,11 +9,11 @@ namespace WebCustomerApp.Models.AccountViewModels
     public class RegisterViewModel
     {
         [Required]
-        [EmailAddress]
+       // [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-		[Phone]
+		//[Phone]
 		[Display(Name = "Phone number")]
 		[RegularExpression(@"^\+[0-9]{12}$", ErrorMessage = "Invalid phone number")]
 		public string PhoneNumber { get; set; }

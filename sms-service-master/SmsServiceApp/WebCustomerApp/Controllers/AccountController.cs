@@ -42,43 +42,138 @@ namespace WebCustomerApp.Controllers
             return View();
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
-        {
-            ViewData["ReturnUrl"] = returnUrl;
-            if (ModelState.IsValid)
-            {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _unitOfWork.SignInRepository.PasswordSignInAsync(model.Login, model.Password, model.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
-                {
-                    _logger.LogInformation("User logged in.");
-                    return RedirectToLocal(returnUrl);
-                }
-                if (result.RequiresTwoFactor)
-                {
-                    return RedirectToAction(nameof(LoginWith2fa), new { returnUrl, model.RememberMe });
-                }
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning("User account locked out.");
-                    return RedirectToAction(nameof(Lockout));
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return View(model);
-                }
-            }
+		[HttpPost]
+		[AllowAnonymous]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
+		{
+			ViewData["ReturnUrl"] = returnUrl;
+			if (ModelState.IsValid)
+			{
+				// This doesn't count login failures towards account lockout
+				// To enable password failures to trigger account lockout, set lockoutOnFailure: true
+				var result = await _unitOfWork.SignInRepository.PasswordSignInAsync(model.Login, model.Password, model.RememberMe, lockoutOnFailure: false);
+				if (result.Succeeded)
+				{
+					_logger.LogInformation("User logged in.");
+					return RedirectToLocal(returnUrl);
+				}
+				if (result.RequiresTwoFactor)
+				{
+					return RedirectToAction(nameof(LoginWith2fa), new { returnUrl, model.RememberMe });
+				}
+				if (result.IsLockedOut)
+				{
+					_logger.LogWarning("User account locked out.");
+					return RedirectToAction(nameof(Lockout));
+				}
+				else
+				{
+					ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+					return View(model);
+				}
+			}
 
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
+			// If we got this far, something failed, redisplay form
+			return View(model);
+		}
 
-        [HttpGet]
+		[HttpGet]
+		[AllowAnonymous]
+		public async Task<IActionResult> NewLogin(string returnUrl = null)
+		{
+			// Clear the existing external cookie to ensure a clean login process
+			await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+
+			ViewData["ReturnUrl"] = returnUrl;
+			return View();
+		}
+
+		[HttpPost]
+		[AllowAnonymous]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> NewLogin(LoginViewModel model, string returnUrl = null)
+		{
+			ViewData["ReturnUrl"] = returnUrl;
+			if (ModelState.IsValid)
+			{
+				// This doesn't count login failures towards account lockout
+				// To enable password failures to trigger account lockout, set lockoutOnFailure: true
+				var result = await _unitOfWork.SignInRepository.PasswordSignInAsync(model.Login, model.Password, model.RememberMe, lockoutOnFailure: false);
+				if (result.Succeeded)
+				{
+					_logger.LogInformation("User logged in.");
+					return RedirectToLocal(returnUrl);
+				}
+				if (result.RequiresTwoFactor)
+				{
+					return RedirectToAction(nameof(LoginWith2fa), new { returnUrl, model.RememberMe });
+				}
+				if (result.IsLockedOut)
+				{
+					_logger.LogWarning("User account locked out.");
+					return RedirectToAction(nameof(Lockout));
+				}
+				else
+				{
+					ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+					return View(model);
+				}
+			}
+
+			// If we got this far, something failed, redisplay form
+			return View(model);
+		}
+
+		[HttpGet]
+		[AllowAnonymous]
+		public IActionResult NewRegister(string returnUrl = null)
+		{
+			ViewData["ReturnUrl"] = returnUrl;
+			return View();
+		}
+
+		[HttpPost]
+		[AllowAnonymous]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> NewRegister(RegisterViewModel model, string returnUrl = null)
+		{
+			ViewData["ReturnUrl"] = returnUrl;
+			if (ModelState.IsValid)
+			{
+				ApplicationUser user = new ApplicationUser { UserName = model.Login, Email = model.Email, PhoneNumber = model.PhoneNumber };
+				var result = await _unitOfWork.UserRepository.CreateAsync(user, model.Password);
+
+				if (result.Succeeded)
+				{
+					_unitOfWork.PhoneRepository.CreateByPhone(user.PhoneNumber);
+					_logger.LogInformation("User created a new account with password.");
+					var code = await _unitOfWork.UserRepository.GenerateEmailConfirmationTokenAsync(user);
+					var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+					await _unitOfWork.EmailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
+
+					await _unitOfWork.SignInRepository.SignInAsync(user, isPersistent: false);
+
+					AdditInfo addInf = new AdditInfo()
+					{
+						Key = "User ID",
+						Value = model.Login,
+						PhoneId = _unitOfWork.PhoneRepository.FindByPhone(user.PhoneNumber).Id
+					};
+					_unitOfWork.AdditInfoRepository.Add(addInf);
+					_unitOfWork.Save();
+
+					return RedirectToLocal(returnUrl);
+				}
+				AddErrors(result);
+			}
+			// If we got this far, something failed, redisplay form
+			return View(model);
+		}
+
+
+
+		[HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> LoginWith2fa(bool rememberMe, string returnUrl = null)
         {
