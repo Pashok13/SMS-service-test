@@ -62,7 +62,10 @@
 				<button onclick="SaveRecepientsInFile()" style="width : 200px">Save list in a file</button>
 			</div>
 			<div>
-				<button onclick="GetRecepientsFromFile()" style="width : 200px">Brovse list from file</button>
+				@*<button onclick="GetRecepientsFromFile()" style="width : 200px">Brovse list from file</button>*@
+				<input type="file"
+					   id="recepients" name="recepientsList"
+					   accept="file/json, file/xml">
 			</div>
 		</section>
 	</td>
@@ -164,8 +167,28 @@
 		return true;
 	}
 
-	function SaveRecepientsInFile() {
+	document.getElementById("recepients").onchange = function () {
+		//var recepientsFromFile = document.getElementById("recepients");
+		var formData = new FormData();
+		//var totalFiles = document.getElementById(e.id).files.length;
+		var file = document.getElementById("recepients").files[0];
+		formData.append("FileUpload", file);
+		$.ajax({
+			type: "POST",
+			url: '/fundprovider/newfundUpload_investmentlogo',
+			data: formData,
+			dataType: 'json',
+			contentType: false,
+			processData: false,
+			success: function (files, data, xhr) {
+				$("#tab3edit_fileaccdoc").val(files);
+				$("#hdnAccountDocument").val(files);
+			},
+			error: function (error) {
 
+			}
+		});
+	})
 	}
 
 	function GetRecepientsFromFile() {
