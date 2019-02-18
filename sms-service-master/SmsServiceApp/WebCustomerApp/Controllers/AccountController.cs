@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using DAL.Interfaces;
+using BAL.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -225,7 +223,12 @@ namespace WebCustomerApp.Controllers
 					await _unitOfWork.EmailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
 
 					await _unitOfWork.SignInRepository.SignInAsync(user, isPersistent: false);
-					_logger.LogInformation("User created a new account with password.");
+
+					AdditInfo addInf = new AdditInfo() { Key = "User ID", Value = model.Login, 
+							PhoneId = _unitOfWork.PhoneRepository.FindByPhone(user.PhoneNumber).Id };
+					_unitOfWork.AdditInfoRepository.Add(addInf);
+					_unitOfWork.Save();
+						
 					return RedirectToLocal(returnUrl);
 				}
 				AddErrors(result);

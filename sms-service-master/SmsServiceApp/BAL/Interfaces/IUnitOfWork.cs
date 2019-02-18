@@ -1,13 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WebCustomerApp.Models;
-using WebCustomerApp.Repositories;
-using WebCustomerApp.Services;
 
-namespace DAL.Interfaces
+namespace BAL.Interfaces
 {
 	public interface IUnitOfWork
 	{
@@ -16,6 +10,7 @@ namespace DAL.Interfaces
 		IEmailSender EmailSender { get; }
 		IPhoneRepository PhoneRepository { get; }
 		IMessageRepository MessageRepository { get; }
+		IAdditInfoRepository AdditInfoRepository { get; }
 		IMessageRecipientRepository MessageRecipientRepository { get; }
 		UserManager<ApplicationUser> UserRepository	{ get; }
 		SignInManager<ApplicationUser> SignInRepository { get; }

@@ -1,7 +1,8 @@
-﻿using System.Net.Mail;
+﻿using BAL.Interfaces;
+using System.Net.Mail;
 using System.Threading.Tasks;
 
-namespace WebCustomerApp.Services
+namespace BAL.Repositories
 {
     // This class is used by the application to send email for account confirmation and password reset.
     // For more details see https://go.microsoft.com/fwlink/?LinkID=532713

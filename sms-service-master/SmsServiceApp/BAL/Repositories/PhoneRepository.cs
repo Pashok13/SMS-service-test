@@ -1,10 +1,10 @@
-﻿using DAL.Interfaces;
+﻿using BAL.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using WebCustomerApp.Data;
 using WebCustomerApp.Models;
 
-namespace WebCustomerApp.Repositories
+namespace BAL.Repositories
 {
 	public class PhoneRepository : GenericRepository<Phone>, IPhoneRepository
 	{
@@ -27,7 +27,7 @@ namespace WebCustomerApp.Repositories
 
 		public List<Phone> GetPhonesByUserId(string userId)
 		{
-			List<Phone> phones = context.Phones.Join(context.MessegesRecipients,
+			return context.Phones.Join(context.MessegesRecipients,
 					p => p.Id,
 					mr => mr.RecepientId,
 					(p, mr) => new
@@ -42,17 +42,25 @@ namespace WebCustomerApp.Repositories
 					}).Where(m => m.mes.UserId == userId)
 					.OrderByDescending(m => m.mes.CreateDate)
 					.AsEnumerable()
-					.Select(tab => new Phone
+					.GroupBy(p => p.num)
+					.Select(t => new Phone
 					{
-						Number = tab.num,
-						AdditInfo = tab.recInfo.Select(inf => new AdditInfo
+						Number = t.Key,
+						//AdditInfo = t.Select(r => r.recInfo.Select(inf => new AdditInfo
+						//{
+						//	Key = inf.key,
+						//	Value = inf.value
+						//}).ToList()
+
+
+						AdditInfo = t.Distinct().Select(inf => new AdditInfo
 						{
-							Key = inf.key,
-							Value = inf.value
+							Key = inf.recInfo.FirstOrDefault().key,
+							Value = inf.recInfo.FirstOrDefault().value
 						}).ToList()
+
 					}).ToList();
 
-			return phones;
 		}
 	}
 }

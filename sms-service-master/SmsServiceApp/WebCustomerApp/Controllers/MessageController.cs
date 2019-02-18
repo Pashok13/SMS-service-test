@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using DAL.Interfaces;
+﻿using System.Collections.Generic;
+using BAL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using WebCustomerApp.Models;
 using WebCustomerApp.Models.MessageViewModels;
 

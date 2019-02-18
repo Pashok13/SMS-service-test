@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using WebCustomerApp.Models;
 
-namespace DAL.Interfaces
+namespace BAL.Interfaces
 {
 	public interface IMessageRepository : IRepository<Message>
 	{

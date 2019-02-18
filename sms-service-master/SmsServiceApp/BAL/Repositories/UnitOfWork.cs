@@ -1,11 +1,10 @@
-﻿using DAL.Interfaces;
+﻿using BAL.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using System;
 using WebCustomerApp.Data;
 using WebCustomerApp.Models;
-using WebCustomerApp.Services;
 
-namespace WebCustomerApp.Repositories
+namespace BAL.Repositories
 {
 	public class UnitOfWork : IDisposable, IUnitOfWork
 	{
@@ -15,6 +14,7 @@ namespace WebCustomerApp.Repositories
 		public IEmailSender EmailSender { get; }
 		public IPhoneRepository PhoneRepository { get; }
 		public IMessageRepository MessageRepository { get; }
+		public IAdditInfoRepository AdditInfoRepository { get; }
 		public IMessageRecipientRepository MessageRecipientRepository { get; }
 
 		public UnitOfWork(ApplicationDbContext context,
@@ -23,6 +23,7 @@ namespace WebCustomerApp.Repositories
 				IEmailSender emailSender,
 				IPhoneRepository phoneRepository, 
 				IMessageRepository messageRepository,
+				IAdditInfoRepository additInfoRepository,
 				IMessageRecipientRepository messageRecipientRepository)
 		{
 			EmailSender = emailSender;
@@ -30,6 +31,7 @@ namespace WebCustomerApp.Repositories
 			SignInRepository = signInRepository;
 			PhoneRepository = phoneRepository;
 			MessageRepository = messageRepository;
+			AdditInfoRepository = additInfoRepository;
 			MessageRecipientRepository = messageRecipientRepository;
 			this.context = context;
 		}

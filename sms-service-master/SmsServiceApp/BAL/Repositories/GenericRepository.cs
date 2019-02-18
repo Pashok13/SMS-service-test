@@ -1,11 +1,11 @@
-﻿using DAL.Interfaces;
+﻿using BAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using WebCustomerApp.Data;
 
-namespace WebCustomerApp.Repositories
+namespace BAL.Repositories
 {
 	public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : class
 	{

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using WebCustomerApp.Models;
 
-namespace DAL.Interfaces
+namespace BAL.Interfaces
 {
 	public interface IPhoneRepository : IRepository<Phone>
 	{

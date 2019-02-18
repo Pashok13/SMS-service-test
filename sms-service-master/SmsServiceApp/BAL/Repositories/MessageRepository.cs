@@ -1,12 +1,10 @@
-﻿using DAL.Interfaces;
-using System;
+﻿using BAL.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using WebCustomerApp.Data;
 using WebCustomerApp.Models;
 
-namespace WebCustomerApp.Repositories
+namespace BAL.Repositories
 {
 	public class MessageRepository : GenericRepository<Message>, IMessageRepository
 	{

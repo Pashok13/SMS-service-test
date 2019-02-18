@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using WebCustomerApp.Models;
+﻿using WebCustomerApp.Models;
 
-namespace DAL.Interfaces
+namespace BAL.Interfaces
 {
 	public interface IMessageRecipientRepository : IRepository<MessageRecipient>
 	{
