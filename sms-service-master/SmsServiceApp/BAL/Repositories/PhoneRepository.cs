@@ -30,7 +30,7 @@ namespace BAL.Repositories
 			return context.Phones.Join(context.MessegesRecipients,
 					p => p.Id,
 					mr => mr.RecepientId,
-					(p, mr) => new
+					(p, mr) => new 
 					{
 						mes = mr.Message,
 						num = p.Number,
@@ -39,27 +39,27 @@ namespace BAL.Repositories
 							key = info.Key,
 							value = info.Value
 						})
-					}).Where(m => m.mes.UserId == userId)
+					}).Where(m => m.mes.UserId == userId )
 					.OrderByDescending(m => m.mes.CreateDate)
 					.AsEnumerable()
-					.GroupBy(p => p.num)
+					//.GroupBy(p => p.num)
 					.Select(t => new Phone
 					{
-						Number = t.Key,
-						//AdditInfo = t.Select(r => r.recInfo.Select(inf => new AdditInfo
-						//{
-						//	Key = inf.key,
-						//	Value = inf.value
-						//}).ToList()
-
-
-						AdditInfo = t.Distinct().Select(inf => new AdditInfo
+						Number = t.num,
+						AdditInfo = t.recInfo.Select(inf => new AdditInfo
 						{
-							Key = inf.recInfo.FirstOrDefault().key,
-							Value = inf.recInfo.FirstOrDefault().value
+							Key = inf.key,
+							Value = inf.value
 						}).ToList()
 
-					}).ToList();
+						//Number = t.Key,
+						//AdditInfo = t.Select(inf => new AdditInfo
+						//{
+						//	Key = inf.recInfo.Select(k => k.key),
+						//	Value = inf.recInfo.Select(k => k.value)
+						//}).ToList()
+
+					}).Distinct().ToList();
 
 		}
 	}
