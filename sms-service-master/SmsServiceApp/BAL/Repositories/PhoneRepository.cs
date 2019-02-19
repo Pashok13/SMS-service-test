@@ -1,6 +1,7 @@
 ﻿using BAL.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WebCustomerApp.Data;
 using WebCustomerApp.Models;
 
@@ -25,7 +26,7 @@ namespace BAL.Repositories
 			return record;
 		}
 
-		public List<Phone> GetPhonesByUserId(string userId)
+		public async Task<List<Phone>> GetPhonesByUserIdAsync(string userId)
 		{
 			return context.Phones.Join(context.MessegesRecipients,
 					p => p.Id,

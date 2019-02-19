@@ -1,6 +1,7 @@
 ﻿using BAL.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WebCustomerApp.Data;
 using WebCustomerApp.Models;
 
@@ -18,9 +19,9 @@ namespace BAL.Repositories
 			context.SaveChanges();
 		}
 
-		public List<Message> GetMessagesByUserId(string userId)
-		{
-			List<Message> messages = context.Messages.Where(mes => mes.UserId == userId)
+		public async Task<List<Message>> GetMessagesByUserIdAsync(string userId)
+		{	
+			return context.Messages.Where(mes => mes.UserId == userId)
 				.Select(m => new
 				{
 					text = m.TextMessage,
@@ -56,8 +57,6 @@ namespace BAL.Repositories
 						}					
 					}).ToList()
 				}).ToList();
-
-			return messages;
 		}
 	}
 }

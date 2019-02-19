@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using WebCustomerApp.Models;
 
 namespace BAL.Interfaces
@@ -7,6 +8,6 @@ namespace BAL.Interfaces
 	{
 		void CreateByPhone(string number);
 		Phone FindByPhone(string number);
-		List<Phone> GetPhonesByUserId(string userId);
+		Task<List<Phone>> GetPhonesByUserIdAsync(string userId);
 	}
 }

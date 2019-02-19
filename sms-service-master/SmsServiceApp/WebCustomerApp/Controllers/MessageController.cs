@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using BAL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using WebCustomerApp.Models;
@@ -54,10 +55,10 @@ namespace WebApp.Controllers
 			}
 		}
 
-		public IActionResult MessageList()
+		public async Task<IActionResult> MessageList()
 		{
 			string userID = _unitOfWork.UserRepository.GetUserId(User);
-			List<Message> messageList = _unitOfWork.MessageRepository.GetMessagesByUserId(userID);
+			List<Message> messageList = await _unitOfWork.MessageRepository.GetMessagesByUserIdAsync(userID);
 			ViewBag.MessagesList = messageList;
 			return View();
 		}

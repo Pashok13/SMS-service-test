@@ -8,9 +8,12 @@ namespace WebCustomerApp.Models.AccountViewModels
 {
     public class RegisterViewModel
     {
-        [Required]
-       // [EmailAddress]
-        [Display(Name = "Email")]
+
+		//[EmailAddress]	
+		[Required]
+		[RegularExpression(@"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))"
+					+ @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,17}))$", ErrorMessage = "Invalid e-mail adress")]
+		[Display(Name = "Email")]
         public string Email { get; set; }
 
 		//[Phone]

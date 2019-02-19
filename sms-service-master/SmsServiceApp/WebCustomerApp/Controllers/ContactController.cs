@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using BAL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using WebCustomerApp.Models;
@@ -14,10 +15,10 @@ namespace WebApp.Controllers
 			_unitOfWork = unitOfWork;
 		}
 
-		public IActionResult ContactList()
+		public async Task<IActionResult> ContactList()
 		{
 			string userID = _unitOfWork.UserRepository.GetUserId(User);
-			List<Phone> contactList = _unitOfWork.PhoneRepository.GetPhonesByUserId(userID);
+			List<Phone> contactList = await _unitOfWork.PhoneRepository.GetPhonesByUserIdAsync(userID);
 			ViewBag.ContactList = contactList;
 			return View();
 		}

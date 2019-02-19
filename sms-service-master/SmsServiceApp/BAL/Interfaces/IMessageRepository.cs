@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using WebCustomerApp.Models;
 
 namespace BAL.Interfaces
@@ -6,6 +7,6 @@ namespace BAL.Interfaces
 	public interface IMessageRepository : IRepository<Message>
 	{
 		void CreateMessage(Message message);
-		List<Message> GetMessagesByUserId(string userId);
+		Task<List<Message>> GetMessagesByUserIdAsync(string userId);
 	}
 }
