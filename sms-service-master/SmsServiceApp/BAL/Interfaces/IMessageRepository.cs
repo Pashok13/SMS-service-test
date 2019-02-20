@@ -7,6 +7,6 @@ namespace BAL.Interfaces
 	public interface IMessageRepository : IRepository<Message>
 	{
 		void CreateMessage(Message message);
-		Task<List<Message>> GetMessagesByUserIdAsync(string userId);
+		Task<List<Message>> GetMessagesByUserId(string userId);
 	}
 }

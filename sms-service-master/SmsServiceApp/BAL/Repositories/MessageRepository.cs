@@ -19,44 +19,49 @@ namespace BAL.Repositories
 			context.SaveChanges();
 		}
 
-		public async Task<List<Message>> GetMessagesByUserIdAsync(string userId)
-		{	
-			return context.Messages.Where(mes => mes.UserId == userId)
-				.Select(m => new
-				{
-					text = m.TextMessage,
-					dateCreate = m.CreateDate,
-					dateSend = m.SendDate,
-					rec = m.MessageRecipient.Select(mesres => new
+		public async Task<List<Message>> GetMessagesByUserId(string userId)
+		{
+			Task<List<Message>> task = Task.Run(() =>
+			{
+				return context.Messages.Where(mes => mes.UserId == userId)
+					.Select(m => new
 					{
-						ph = mesres.Phone.Number,
-						recInfo = mesres.Phone.AdditInfo.Select(info => new
+						text = m.TextMessage,
+						dateCreate = m.CreateDate,
+						dateSend = m.SendDate,
+						rec = m.MessageRecipient.Select(mesres => new
 						{
-							key = info.Key,
-							value = info.Value
+							ph = mesres.Phone.Number,
+							recInfo = mesres.Phone.AdditInfo.Select(info => new
+							{
+								key = info.Key,
+								value = info.Value
+							})
 						})
 					})
-				})
-				.OrderByDescending(m => m.dateSend)
-				.AsEnumerable()
-				.Select(tabl => new Message
-				{
-					TextMessage = tabl.text,
-					CreateDate = tabl.dateCreate,
-					SendDate = tabl.dateSend,
-					MessageRecipient = tabl.rec.Select(r => new MessageRecipient
+					.OrderByDescending(m => m.dateSend)
+					.AsEnumerable()
+					.Select(tabl => new Message
 					{
-						Phone = new Phone()
-						{ 
-						Number = r.ph,
-						AdditInfo = r.recInfo.Select(inf => new AdditInfo
+						TextMessage = tabl.text,
+						CreateDate = tabl.dateCreate,
+						SendDate = tabl.dateSend,
+						MessageRecipient = tabl.rec.Select(r => new MessageRecipient
 						{
-							Key = inf.key,
-							Value = inf.value
+							Phone = new Phone()
+							{
+								Number = r.ph,
+								AdditInfo = r.recInfo.Select(inf => new AdditInfo
+								{
+									Key = inf.key,
+									Value = inf.value
+								}).ToList()
+							}
 						}).ToList()
-						}					
-					}).ToList()
-				}).ToList();
+					}).ToList();
+			});
+
+			return await task;
 		}
 	}
 }

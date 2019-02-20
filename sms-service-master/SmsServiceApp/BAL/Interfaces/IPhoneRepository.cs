@@ -8,6 +8,6 @@ namespace BAL.Interfaces
 	{
 		void CreateByPhone(string number);
 		Phone FindByPhone(string number);
-		Task<List<Phone>> GetPhonesByUserIdAsync(string userId);
+		Task<List<Phone>> GetPhonesByUserId(string userId);
 	}
 }

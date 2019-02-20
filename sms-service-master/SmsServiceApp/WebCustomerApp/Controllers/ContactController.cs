@@ -18,7 +18,7 @@ namespace WebApp.Controllers
 		public async Task<IActionResult> ContactList()
 		{
 			string userID = _unitOfWork.UserRepository.GetUserId(User);
-			List<Phone> contactList = await _unitOfWork.PhoneRepository.GetPhonesByUserIdAsync(userID);
+			List<Phone> contactList = await _unitOfWork.PhoneRepository.GetPhonesByUserId(userID);
 			ViewBag.ContactList = contactList;
 			return View();
 		}

@@ -58,7 +58,7 @@ namespace WebApp.Controllers
 		public async Task<IActionResult> MessageList()
 		{
 			string userID = _unitOfWork.UserRepository.GetUserId(User);
-			List<Message> messageList = await _unitOfWork.MessageRepository.GetMessagesByUserIdAsync(userID);
+			List<Message> messageList = await _unitOfWork.MessageRepository.GetMessagesByUserId(userID);
 			ViewBag.MessagesList = messageList;
 			return View();
 		}

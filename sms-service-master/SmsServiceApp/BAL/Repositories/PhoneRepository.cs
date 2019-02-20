@@ -26,9 +26,11 @@ namespace BAL.Repositories
 			return record;
 		}
 
-		public async Task<List<Phone>> GetPhonesByUserIdAsync(string userId)
+		public async Task<List<Phone>> GetPhonesByUserId(string userId)
 		{
-			return context.Phones.Join(context.MessegesRecipients,
+			Task<List<Phone>> task = Task.Run(() =>
+			{
+				return context.Phones.Join(context.MessegesRecipients,
 					p => p.Id,
 					mr => mr.RecepientId,
 					(p, mr) => new 
@@ -61,6 +63,9 @@ namespace BAL.Repositories
 						//}).ToList()
 
 					}).Distinct().ToList();
+			});
+
+			return await task;
 
 		}
 	}
