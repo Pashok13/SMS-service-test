@@ -15,7 +15,12 @@ namespace WebCustomerApp.Controllers
             return View();
         }
 
-        public IActionResult Error()
+		public IActionResult About()
+		{
+			return View();
+		}
+
+		public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }

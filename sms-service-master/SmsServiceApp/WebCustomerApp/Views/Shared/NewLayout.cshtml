@@ -1,0 +1,133 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using WebCustomerApp.Models
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>@ViewData["Title"]</title>
+
+	<!-- Meta tag Keywords -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="utf-8">
+	<script>
+		addEventListener("load", function () {
+			setTimeout(hideURLbar, 0);
+		}, false);
+
+		function hideURLbar() {
+			window.scrollTo(0, 1);
+		}
+	</script>
+	<!--// Meta tag Keywords -->
+	<!-- css files -->
+	<link rel="stylesheet" href="~/css/bootstrap.css"> <!-- Bootstrap-Core-CSS -->
+	<link rel="stylesheet" href="~/css/site.css" />
+	<link rel="stylesheet" href="~/css/style.css" type="text/css" media="all" /> <!-- Style-CSS -->
+	<link rel="stylesheet" href="~/css/font-awesome.min.css" type="text/css" media="all" /> <!-- Style-CSS -->
+	<!-- //css files -->
+	<!--web font-->
+	<link href="//fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+	<!--//web font-->
+
+</head>
+
+<body>
+
+	<!-- header -->
+	<header>
+		<div class="container">
+			<div class="header d-lg-flex align-items-center">
+				<div class="header-agile">
+					<h1>
+						<a asp-action="Index" asp-route-returnurl="@ViewData["ReturnUrl"]" class="navbar-brand logo">
+							<span class="fa fa-lightbulb-o"></span>
+						</a>
+					</h1>
+				</div>
+				<div class="nav_w3ls">
+					<nav>
+						<label for="drop" class="toggle mt-lg-0 mt-2"><span class="fa fa-bars" aria-hidden="true"></span></label>
+						<input type="checkbox" id="drop" />
+						<ul class="menu">
+							<li><a asp-controller="Home" asp-action="Index" asp-route-returnurl="@ViewData["ReturnUrl"]" class="active">Home</a></li>
+							<li><a asp-controller="Home" asp-action="About" asp-route-returnurl="@ViewData["ReturnUrl"]" class="active">About</a></li>
+
+							@if (SignInManager.IsSignedIn(User))
+							{
+								<li><a asp-controller="Message" asp-action="NewMessage" asp-route-returnurl="@ViewData["ReturnUrl"]" class="active">New message</a></li>
+								<li><a asp-controller="Message" asp-action="MessageList" asp-route-returnurl="@ViewData["ReturnUrl"]" class="active">Message list</a></li>
+								<li><a asp-controller="Contact" asp-action="ContactList" asp-route-returnurl="@ViewData["ReturnUrl"]" class="active">Contact list</a></li>
+
+								<li class="p-0">
+									<label for="drop-2" class="toggle">Hello @UserManager.GetUserName(User)! <span class="fa fa-angle-down" aria-hidden="true"></span> </label>
+									<a href="#">Hello @UserManager.GetUserName(User)! <span class="fa fa-angle-down" aria-hidden="true"></span></a>
+									<input type="checkbox" id="drop-2" />
+									<ul class="inner-dropdown">
+										<li><a asp-controller="Manage" asp-action="Index" asp-route-returnurl="@ViewData["ReturnUrl"]" class="active">Profile manager</a></li>
+										<form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="navbar-right">
+											<button style="color:black" type="submit" class="btn btn-link navbar-btn navbar-link">Log out</button>
+										</form>
+									</ul>
+								</li>
+							}
+
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</header>
+	<!-- //header -->
+	<!-- banner -->
+	<div class="inner-banner" id="home">
+		<div class="container">
+		</div>
+	</div>
+	<!-- //banner -->
+	<br /><br />
+	<div class="container body-content">
+		@RenderBody()
+	</div>
+	<br />
+	<!-- footer -->
+	<footer>
+		<!-- //advantages -->
+		<div class="copyright text-center py-3">
+			<p>© 2019 SMS-service</p>
+		</div>
+		<!-- //footer -->
+		<!-- move top icon -->
+		<a href="#home" class="move-top text-center">
+			<span class="fa fa-angle-double-up"></span>
+		</a>
+		<!-- //move top icon -->
+	</footer>
+	<!-- //footer -->
+
+	<environment include="Development">
+		<script src="~/lib/jquery/dist/jquery.js"></script>
+		<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+		<script src="~/js/site.js" asp-append-version="true"></script>
+	</environment>
+	<environment exclude="Development">
+		<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+				asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+				asp-fallback-test="window.jQuery"
+				crossorigin="anonymous"
+				integrity="sha384-K+ctZQ+LL8q6tP7I94W+qzQsfRV2a+AfHIi9k8z8l9ggpc8X+Ytst4yBo/hH+8Fk">
+		</script>
+		<script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
+				asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+				asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+				crossorigin="anonymous"
+				integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
+		</script>
+		<script src="~/js/site.min.js" asp-append-version="true"></script>
+	</environment>
+
+	@RenderSection("Scripts", required: false)
+</body>
+</html>
