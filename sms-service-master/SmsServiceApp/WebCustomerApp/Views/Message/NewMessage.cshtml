@@ -13,28 +13,69 @@
 	Layout = "/Views/Shared/NewLayout.cshtml";
 }
 
-<h2 style="margin-left : 30px">@ViewData["Title"]</h2>
-<br />
 <table style="border-collapse:separate; border-spacing : 20px 10px">
 <tr>
-	<td style="width : 250px">
-		<section>
+	<td style="width : 500px; height = 400px; padding-left: 50px">
+		<section class="contact pt-5" id="gallery">
+			<div class="container py-lg-5">
+				<div class="heading-grid text-center">
+					<h5>New Message</h5>
+				</div>
+				<div class="contact-form">
+					<form action="#" method="post">
+						<div class="row main-w3layouts-sectns">
+							<div class="col-md-12 w3-btm-spc form-text1">
+								<input type="text" id="phoneEditor" placeholder="Recepient phone" />
+								<span asp-validation-for="RecepientPhones" id="phoneError" class="text-danger"></span>
+							</div>
+							<div class="col-md-6 w3-btm-spc form-text1" style="align-content:center">
+								<input type="button" class="btn" value="Add recepient" onclick="AddRecepient()" />
+							</div>
+							<div class="col-md-6 w3-btm-spc form-text2">
+								<input type="button" class="btn" value="Remove" onclick="RemoveRecepient()" />
+							</div>
+						</div>
+						<div class="main-w3layouts-sectns ">
+							<div class="col-md-12 w3-btm-spc form-text1">
+								<textarea id="textEditor" placeholder="Enter Your Message Here"></textarea>
+								<span asp-validation-for="MessageText" id="textError" class="text-danger"></span>
+							</div>
+						</div>
+						<div class="col-md-12 w3-btm-spc form-text1" style="justify-content:center">
+							<input class="form-control" style="width : 250px" type="datetime-local" id="dateOfSend" lang="uk">
+							<span asp-validation-for="DateOfSend" id="dateError" class="text-danger"></span>
+							<br />
+						</div>
+						<div class="text-center">
+							<button type="submit" onclick="MakeModel()" id="sendMessage" class="btn"> Send</button>
+						</div>
+						<div>
+							<br />
+							<label id="generalInfo" style="color : red; width : 250px"></label>
+						</div>
+					</form>
+				</div>
+			</div>
+		</section>
+		@*<section>
 			<div class="form-group">
 				<label>Recepient phone</label>
 				<input id="phoneEditor" class="form-control" />
 				<span asp-validation-for="RecepientPhones" id="phoneError" class="text-danger"></span>
 			</div>
 
-			<div>
-				<button onclick="AddRecepient()">Add recepient</button>
-				<button onclick="RemoveRecepient()">Remove recepient</button>
+			<div >
+				<p>
+					<input type="button" value="Add recepient" onclick="AddRecepient()"/>
+					<input type="button" value="Remove" onclick="RemoveRecepient()"/>
+				</p>
 			</div>
 
 			<br>
 
 			<div class="form-group">
 				<label>Message text</label>
-				<textarea id="textEditor" class="form-control" style="height : 135px; resize : none"></textarea>
+				<textarea id="textEditor" class="form-control" style="height : 160px; resize : none"></textarea>
 				<span asp-validation-for="MessageText" id="textError" class="text-danger"></span>
 			</div>
 
@@ -51,22 +92,23 @@
 				<label id="generalInfo" style="color : red; width : 250px"></label>
 			</div>
 
-		</section>
+		</section>*@
 	</td>
-	<td style="width : 200px">
+	<td style="width : 400px; height = 400px; padding-left: 100px" >
 		<section aria-readonly="true">
 			<div class="form-group">
-				<textarea class="form-control" style="width : 200px; resize : none" id="phones" rows="16" readonly="readonly"></textarea>
+				<textarea class="form-control" style="width : 200px; height:400px; resize : none" id="phones" readonly="readonly"></textarea>
 			</div>
-			<div>
+			@*<div>
 				<button onclick="SaveRecepientsInFile()" style="width : 200px">Save list in a file</button>
 			</div>
 			<div>
-				@*<button onclick="GetRecepientsFromFile()" style="width : 200px">Brovse list from file</button>*@
+				<button onclick="GetRecepientsFromFile()" style="width : 200px">Brovse list from file</button>
 				<input type="file"
 					   id="recepients" name="recepientsList"
 					   accept="file/json, file/xml">
 			</div>
+			*@
 		</section>
 	</td>
 </tr>
@@ -167,30 +209,4 @@
 		return true;
 	}
 
-	document.getElementById("recepients").onchange = function () {
-		//var recepientsFromFile = document.getElementById("recepients");
-		var formData = new FormData();
-		//var totalFiles = document.getElementById(e.id).files.length;
-		var file = document.getElementById("recepients").files[0];
-		formData.append("FileUpload", file);
-		$.ajax({
-			type: "POST",
-			url: '/fundprovider/newfundUpload_investmentlogo',
-			data: formData,
-			dataType: 'json',
-			contentType: false,
-			processData: false,
-			success: function (files, data, xhr) {
-				$("#tab3edit_fileaccdoc").val(files);
-				$("#hdnAccountDocument").val(files);
-			},
-			error: function (error) {
-
-			}
-		});
-	}
-
-	function GetRecepientsFromFile() {
-
-	}
 </script>

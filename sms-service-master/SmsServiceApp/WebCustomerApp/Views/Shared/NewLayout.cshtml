@@ -37,12 +37,12 @@
 <body>
 
 	<!-- header -->
-	<header>
+	<header >
 		<div class="container">
 			<div class="header d-lg-flex align-items-center">
 				<div class="header-agile">
 					<h1>
-						<a asp-action="Index" asp-route-returnurl="@ViewData["ReturnUrl"]" class="navbar-brand logo">
+						<a asp-controller="Home" asp-action="Index" asp-route-returnurl="@ViewData["ReturnUrl"]" class="navbar-brand logo">
 							<span class="fa fa-lightbulb-o"></span>
 						</a>
 					</h1>
@@ -87,13 +87,14 @@
 		</div>
 	</div>
 	<!-- //banner -->
-	<br /><br />
+	<br />
+	<br />
 	<div class="container body-content">
 		@RenderBody()
 	</div>
 	<br />
-	<!-- footer -->
-	<footer>
+
+	<footer style="flex-grow:1">
 		<!-- //advantages -->
 		<div class="copyright text-center py-3">
 			<p>© 2019 SMS-service</p>
