@@ -733,7 +733,13 @@ li > a:only-child:after { content: ''; }
 
 /*-- footer --*/
 footer {
-    background: #222;
+	background: #222;
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	color: white;
+	text-align: center;
 }
 .copyright {
     background: #191919;
